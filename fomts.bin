@@ -1,0 +1,37 @@
+from PIL import Image, ImageDraw, ImageFont
+import os
+
+def generate_single_char_images(chars, font_path, output_dir, image_size=(100, 100)):
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+
+    font_size = 50  # 字体大小-调整这个
+    font = ImageFont.truetype(font_path, font_size)
+
+    for char in chars:
+        img = Image.new('RGBA', image_size, color=(0,0,0,0))
+        draw = ImageDraw.Draw(img)
+        
+
+        text_bbox = draw.textbbox((0, 0), char, font=font)
+        text_width = text_bbox[2] - text_bbox[0]
+        text_height = text_bbox[3] - text_bbox[1]
+        position = ((image_size[0] - text_width) // 2, (image_size[1] - text_height) // 2)
+        
+   
+        draw.text(position, char, fill='black', font=font)
+        
+        if char==':':
+            char='mh'
+        char=char+'_bl'
+        output_path = os.path.join(output_dir, f"{char}.png")
+        img.save(output_path)
+        print(f"图片已保存：{output_path}")
+
+
+chars = "1234567890:" 
+font_path = "0.ttf"  # 替换为字体文件路径-调整这个
+output_dir = "powererd_by_BlueEve_字体转文件"  # 输出目录
+generate_single_char_images(chars, font_path, output_dir)
